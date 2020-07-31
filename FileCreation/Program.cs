@@ -6,9 +6,9 @@ namespace FileCreation
     {
         static void Main(string[] args)
         {
-            Utility.CreateNoteFile();  
+           // Utility.CreateLogFile();  
             Utility.CreateNoteFileWithAppConfigFilePath();
-            //Utility utility = new Utility();
+            
             //utility.CreateNoteFileWithJsonConfigFilePath();
             Console.ReadLine();
             

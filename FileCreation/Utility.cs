@@ -10,50 +10,48 @@ using System.Collections.Specialized;
 namespace FileCreation
 {
     static class Utility
-    {      
-      
-        public static void CreateNoteFile()
+    {
+        const string eDrive = "E:\\";
+        const string dDrive = "D:\\";
+        const string cDrive = "C:\\";
+
+        static string dDriveLogPath = "D:\\Logs";
+        static string eDriveLogPath = "D:\\Logs";
+
+        public static void CreateLogFile()
         {
-            bool isNoteFileCreated = false;
-            //List<string> logicalDrives = new List<string>();
-            //logicalDrives = Directory.GetLogicalDrives().ToList();
+            bool isLogFileCreated = false;
+            List<string> logicalDrives = new List<string>();
+            logicalDrives = Directory.GetLogicalDrives().ToList();
 
-            //switch (drive)
-            //{
-            //    case eDrive:
-            //         isNoteFileCreated = CreateNoteFileInSpecificDrive(drive);
-            //        break;
-            //    case dDrive:
-            //        isNoteFileCreated = CreateNoteFileInSpecificDrive(drive);
-            //        break;
+            foreach (var drive in logicalDrives)
+            {
+                switch (drive)
+                {
+                    case eDrive:
+                        isLogFileCreated = CreateNoteFileInSpecificDrive(eDriveLogPath, "message");
+                        break;
+                    case dDrive:
+                        isLogFileCreated = CreateNoteFileInSpecificDrive(dDriveLogPath, "message");
+                        break;
 
-            //    default:
-            //        break;
-            //}
-
-            if (isNoteFileCreated == false)
-            {
-                isNoteFileCreated = CreateNoteFileInSpecificDrive(ConfigurationManager.AppSettings["gDriveLog"], "Amar");
-            }
-            else if (isNoteFileCreated == false)
-            {
-                isNoteFileCreated = CreateNoteFileInSpecificDrive(ConfigurationManager.AppSettings["eDriveLog"],"Amar");
-            }
-            else if ( isNoteFileCreated == false)
-            {
-                isNoteFileCreated = CreateNoteFileInSpecificDrive(ConfigurationManager.AppSettings["dDriveLog"],"Amar");
+                    default:
+                        break;
+                }
+                if (isLogFileCreated == true)
+                {
+                    return;
+                }
             }
         }
 
-        private static bool CreateNoteFileInSpecificDrive(string drivePath, string message)
+        private static bool CreateNoteFileInSpecificDrive(string logDirectoryPath, string message)
         {
-            string LogDirectoryPath = @drivePath; //+ ConfigurationManager.AppSettings["LogFoler"];
-
-            if (!Directory.Exists(LogDirectoryPath))
+            if (!Directory.Exists(@logDirectoryPath))
             {
                 try
                 {
-                    Directory.CreateDirectory(LogDirectoryPath);
+                    Directory.CreateDirectory(@logDirectoryPath);
                 }
                 catch (Exception ex)
                 {
@@ -62,34 +60,33 @@ namespace FileCreation
                 }
             }
 
-            string NoteFilePath = LogDirectoryPath + "\\NoteFile" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss") + ".txt";
-            StreamWriter writer = new StreamWriter(NoteFilePath);
+            string logFilePath = @logDirectoryPath + "\\NoteFile" + DateTime.Now.ToString("dd_MM_yyyy_hh_mm_ss") + ".txt";
+            StreamWriter writer = new StreamWriter(logFilePath);
             writer.WriteLine(message);
+            writer.Close();
 
-            writer.Close();           
             return true;
         }
 
         internal static void CreateNoteFileWithAppConfigFilePath()
-        {           
-            string noteFilePath =  ConfigurationManager.AppSettings["NoteFilePath"];
-            StreamWriter writer = new StreamWriter(noteFilePath);
-            writer.WriteLine("Amardeep's Message ");
-
-            writer.Close();
-        }
-
-
-
-        public static void CreateNoteFileWithJsonConfigFilePath()
         {
-            string noteFilePath = _configuration.GetSection("NoteFilePathWithJson").Value.ToString();
+            string noteFilePath = ConfigurationManager.AppSettings["NoteFilePath"];
             StreamWriter writer = new StreamWriter(noteFilePath);
             writer.WriteLine("Amardeep's Message ");
-
             writer.Close();
         }
+
+
+
+        //public static void CreateNoteFileWithJsonConfigFilePath()
+        //{
+        //    string noteFilePath = _configuration.GetSection("NoteFilePathWithJson").Value.ToString();
+        //    StreamWriter writer = new StreamWriter(noteFilePath);
+        //    writer.WriteLine("Amardeep's Message ");
+
+        //    writer.Close();
+        //}
     }
 
-    
+
 }
